@@ -8,8 +8,5 @@ pipelines:
             - apk add git
             - go get github.com/google/licensecheck
             - go build
-            - pipe: atlassian/bitbucket-upload-file:0.1.2
-              variables:
-                BITBUCKET_USERNAME: $BB_AUTH_USERNAME
-                BITBUCKET_APP_PASSWORD: $BB_AUTH_PASSWORD
-                FILENAME: "licence_checker"
+            - ls -l
+            - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"licence-checker"
