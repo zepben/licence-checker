@@ -1,0 +1,9 @@
+image: golang:alpine
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build and release
+          script:
+            - go build
+            - export artifact=licence_checker
