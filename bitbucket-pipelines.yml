@@ -8,4 +8,8 @@ pipelines:
             - apk add git
             - go get github.com/google/licensecheck
             - go build
-            - export artifact=licence_checker
+            - pipe: atlassian/bitbucket-upload-file:0.1.2
+              variables:
+                BITBUCKET_USERNAME: $BB_AUTH_USERNAME
+                BITBUCKET_APP_PASSWORD: $BB_AUTH_PASSWORD
+                FILENAME: "licence_checker"
