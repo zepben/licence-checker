@@ -5,6 +5,7 @@ pipelines:
       - step:
           name: Build and release
           script:
+            - apk add git
             - go get github.com/google/licensecheck
             - go build
             - export artifact=licence_checker
