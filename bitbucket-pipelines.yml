@@ -6,6 +6,6 @@ pipelines:
           name: Build and release
           script:
             - go get github.com/google/licensecheck
-            - go build
+            - go build -o licence-checker check.go
             - ls -l
             - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"licence-checker"
