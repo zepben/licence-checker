@@ -31,11 +31,11 @@ func main() {
 	checker := licensecheck.New(gpls)
 		file, err := ioutil.ReadFile(filepath)
 		check(err)
-		_, succ := checker.Cover(file, licensecheck.Options{10, 80, 8})
+		_, succ := checker.Cover(file, licensecheck.Options{10, 92, 8})
 		if (succ) {
 			os.Exit(0)
 		} else {
-			fmt.Println("Licence check for AGPL failed with a <80% match for", filepath, "Ensure the AGPL licence is present in the file")
+			fmt.Println("Licence check for AGPL failed with a <92% match for", filepath, "Ensure the AGPL licence is present and correct in the file.")
 			os.Exit(-1)
 		}
 }
