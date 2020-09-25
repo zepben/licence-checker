@@ -1,4 +1,5 @@
 package main
+
 import (
 	"github.com/google/licensecheck"
 )
@@ -7,6 +8,8 @@ import (
 	"io/ioutil"
 	"os"
 )
+
+var REQUIRED_MATCH_PERCENTAGE = 88
 
 func check(e error) {
 	if e != nil {
@@ -24,18 +27,18 @@ func main() {
 	filepath := os.Args[1]
 
 	for _, l := range licences {
-		if l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0"{
+		if l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" {
 			gpls = append(gpls, l)
 		}
 	}
 	checker := licensecheck.New(gpls)
 		file, err := ioutil.ReadFile(filepath)
 		check(err)
-		_, succ := checker.Cover(file, licensecheck.Options{10, 92, 8})
+		_, succ := checker.Cover(file, licensecheck.Options{10, REQUIRED_MATCH_PERCENTAGE, 8})
 		if (succ) {
 			os.Exit(0)
 		} else {
-			fmt.Println("Licence check for AGPL failed with a <92% match for", filepath, "Ensure the AGPL licence is present and correct in the file.")
+			fmt.Println("Licence check failed with a <", REQUIRED_MATCH_PERCENTAGE, "% match for", filepath, "Ensure the AGPL or MPL licence is present and correct in the file.")
 			os.Exit(-1)
 		}
 }
