@@ -1,0 +1,41 @@
+name: Upload Release Asset
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    container: webhippie/golang
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build licence checker
+        run: |
+          go get -v -t ./...
+          go build -o licence-checker check.go
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./licence-checker
+          asset_name: licence-checker
+          asset_content_type: application/octet-stream
