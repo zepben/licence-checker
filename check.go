@@ -35,7 +35,7 @@ func main() {
 	filepath := os.Args[1]
 
 	for _, l := range licences {
-		if l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" {
+		if l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT" {
 			gpls = append(gpls, l)
 		}
 	}
