@@ -14,7 +14,7 @@ func TestIsValidLicense(t *testing.T) {
 		want    bool
 		wantErr bool
 	}{
-		{name: "Zepben copy", args: args{"Zepben-copy.lre"}, want: true, wantErr: false},
+		{name: "Zepben copy", args: args{"Zepben-2023.txt"}, want: true, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
