@@ -17,7 +17,7 @@ import (
 	"os"
 )
 
-var REQUIRED_MATCH_PERCENTAGE = 88
+const RequiredMatchPercentage = 88
 
 func check(e error) {
 	if e != nil {
@@ -27,7 +27,7 @@ func check(e error) {
 
 // Simple program for checking for AGPL licences.
 // Takes a single argument: The path of the file to check
-// Returns 0 on success and -1 if neither the AGPL licence or header snippet did not meet an 80% match.
+// Returns 0 on success and -1 if neither the AGPL licence nor header snippet did not meet an 80% match.
 // Should be used on either source files with licence headers or COPYING files.
 func main() {
 	var licences = licensecheck.BuiltinLicenses()
@@ -40,13 +40,13 @@ func main() {
 		}
 	}
 	checker := licensecheck.New(gpls)
-		file, err := ioutil.ReadFile(filepath)
-		check(err)
-		_, succ := checker.Cover(file, licensecheck.Options{10, REQUIRED_MATCH_PERCENTAGE, 8})
-		if (succ) {
-			os.Exit(0)
-		} else {
-			fmt.Println("Licence check failed with a <", REQUIRED_MATCH_PERCENTAGE, "% match for", filepath, "Ensure the AGPL or MPL licence is present and correct in the file.")
-			os.Exit(-1)
-		}
+	file, err := ioutil.ReadFile(filepath)
+	check(err)
+	_, succ := checker.Cover(file, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
+	if succ {
+		os.Exit(0)
+	} else {
+		fmt.Println("Licence check failed with a <", RequiredMatchPercentage, "% match for", filepath, "Ensure the AGPL or MPL licence is present and correct in the file.")
+		os.Exit(-1)
+	}
 }
