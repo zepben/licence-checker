@@ -31,7 +31,7 @@ func IsValidLicense(filepath string) (bool, error) {
 	var acceptedLicences []licensecheck.License
 
 	for _, l := range licensecheck.BuiltinLicenses() {
-		if l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT" {
+		if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
 			acceptedLicences = append(acceptedLicences, l)
 		}
 	}
@@ -44,7 +44,7 @@ func IsValidLicense(filepath string) (bool, error) {
 	if succ {
 		return true, nil
 	} else {
-		return false, fmt.Errorf("Licence check failed with a <", RequiredMatchPercentage, "% match for", filepath, "Ensure the AGPL or MPL licence is present and correct in the file.")
+		return false, fmt.Errorf("Licence check failed with a <%d%% match for %s. Ensure the AGPL or MPL licence is present and correct in the file.", RequiredMatchPercentage, filepath)
 	}
 }
 
