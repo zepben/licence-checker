@@ -1,3 +1,11 @@
+/*
+ * Copyright 2022 Zeppelin Bend Pty Ltd
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package main
 
 import (
@@ -14,7 +22,8 @@ func TestIsValidLicense(t *testing.T) {
 		want    bool
 		wantErr bool
 	}{
-		{name: "Zepben 2023", args: args{"Zepben-2023.txt"}, want: true, wantErr: false},
+		{name: "Zepben 2023 C-style", args: args{"Zepben-2023-C-style.txt"}, want: true, wantErr: false},
+		{name: "Zepben 2023 shell-style", args: args{"Zepben-2023-shell-style.txt"}, want: true, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
