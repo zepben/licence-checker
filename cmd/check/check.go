@@ -9,7 +9,7 @@
 package main
 
 import (
-	"github.com/google/licencecheck"
+	"github.com/google/licensecheck"
 )
 import (
 	"fmt"
@@ -28,17 +28,17 @@ func IsValidLicence(filepath string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
 	check(err)
 
-	var acceptedLicences []licencecheck.Licence
+	var acceptedLicences []licensecheck.Licence
 
-	for _, l := range licencecheck.BuiltinLicences() {
+	for _, l := range licensecheck.BuiltinLicences() {
 		if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
 			acceptedLicences = append(acceptedLicences, l)
 		}
 	}
-	acceptedLicences = append(acceptedLicences, licencecheck.Licence{Name: "Zepben", Text: ZepbenLicence})
-	checker := licencecheck.New(acceptedLicences)
+	acceptedLicences = append(acceptedLicences, licensecheck.Licence{Name: "Zepben", Text: ZepbenLicence})
+	checker := licensecheck.New(acceptedLicences)
 
-	_, succ := checker.Cover(licence, licencecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
+	_, succ := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
 	if succ {
 		return true, nil
 	} else {
