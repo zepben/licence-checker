@@ -2,7 +2,7 @@
  * Copyright 2022 Zeppelin Bend Pty Ltd
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * Licence, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestIsValidLicense(t *testing.T) {
+func TestIsValidLicence(t *testing.T) {
 	type args struct {
 		filepath string
 	}
@@ -27,13 +27,13 @@ func TestIsValidLicense(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := IsValidLicense(tt.args.filepath)
+			got, err := IsValidLicence(tt.args.filepath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("IsValidLicense() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("IsValidLicence() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("IsValidLicense() got = %v, want %v", got, tt.want)
+				t.Errorf("IsValidLicence() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
