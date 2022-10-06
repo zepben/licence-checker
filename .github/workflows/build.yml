@@ -1,0 +1,26 @@
+name: Build and test
+
+on:
+  pull-request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    container: webhippie/golang
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build licence checker
+        run: |
+          go get -v -t ./...
+          go build -o licence-checker ./...
+
+      - name: Test licence checker
+        run: |
+          go test ./...
+
+
