@@ -16,7 +16,11 @@ jobs:
       - name: Build licence checker
         run: |
           go get -v -t ./...
-          go build -o licence-checker check.go
+          go build -o licence-checker ./...
+
+      - name: Test licence checker
+        run: |
+          go test ./...
 
       - name: Create Release
         id: create_release

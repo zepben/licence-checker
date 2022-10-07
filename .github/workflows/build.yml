@@ -1,7 +1,7 @@
 name: Build and test
 
 on:
-  pull-request:
+  pull_request:
   push:
     branches:
       - main
@@ -13,6 +13,12 @@ jobs:
     container: webhippie/golang
     steps:
       - uses: actions/checkout@v3
+
+      - name: Work around git permission issue
+        run: |
+          dname=$(echo ${{github.repository}} | cut -d'/' -f2)
+          git config --global --add safe.directory /__w/$dname/$dname
+        shell: sh
 
       - name: Build licence checker
         run: |
