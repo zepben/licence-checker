@@ -28,14 +28,14 @@ func IsValidLicence(filepath string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
 	check(err)
 
-	var acceptedLicences []licensecheck.Licence
+	var acceptedLicences []licensecheck.License
 
-	for _, l := range licensecheck.BuiltinLicences() {
+	for _, l := range licensecheck.BuiltinLicenses() {
 		if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
 			acceptedLicences = append(acceptedLicences, l)
 		}
 	}
-	acceptedLicences = append(acceptedLicences, licensecheck.Licence{Name: "Zepben", Text: ZepbenLicence})
+	acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "Zepben", Text: ZepbenLicence})
 	checker := licensecheck.New(acceptedLicences)
 
 	_, succ := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
