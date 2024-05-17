@@ -24,18 +24,22 @@ func check(e error) {
 	}
 }
 
-func IsValidLicence(filepath string) (bool, error) {
+func IsValidLicence(filepath string, private bool) (bool, error) {
 	licence, err := os.ReadFile(filepath)
 	check(err)
 
 	var acceptedLicences []licensecheck.License
 
-	for _, l := range licensecheck.BuiltinLicenses() {
-		if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
-			acceptedLicences = append(acceptedLicences, l)
+	if private {
+		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "Zepben", Text: ZepbenLicence})
+	} else {
+		for _, l := range licensecheck.BuiltinLicenses() {
+			if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
+				acceptedLicences = append(acceptedLicences, l)
+			}
 		}
 	}
-	acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "Zepben", Text: ZepbenLicence})
+
 	checker := licensecheck.New(acceptedLicences)
 
 	_, succ := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
@@ -56,7 +60,15 @@ func IsValidLicence(filepath string) (bool, error) {
 // Returns 0 on success and -1 if either the licence or header snippet did not meet an 80% match.
 // Should be used on either source files with licence headers or COPYING files.
 func main() {
-	valid, err := IsValidLicence(os.Args[1])
+
+	var private bool
+	if os.Args[2] == "private" {
+		private = true
+	} else {
+		private = false
+	}
+
+	valid, err := IsValidLicence(os.Args[1], private)
 	if valid {
 		os.Exit(0)
 	} else {
