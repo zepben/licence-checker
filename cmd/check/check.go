@@ -9,11 +9,10 @@
 package main
 
 import (
-	"github.com/google/licensecheck"
-)
-import (
 	"fmt"
 	"os"
+
+	"github.com/google/licensecheck"
 )
 
 const RequiredMatchPercentage = 88
@@ -24,29 +23,27 @@ func check(e error) {
 	}
 }
 
-func IsValidLicence(filepath string, private bool) (bool, error) {
+func IsValidLicence(filepath string, licence_type string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
 	check(err)
 
 	var acceptedLicences []licensecheck.License
 
-	if private {
-		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "Zepben", Text: ZepbenLicence})
+	if licence_type == "private" {
+		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "ZepbenPrivate", Text: ZepbenPrivateLicence})
+	} else if licence_type == "public" {
+		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "ZepbenPublic", Text: ZepbenPublicLicence})
 	} else {
-		for _, l := range licensecheck.BuiltinLicenses() {
-			if (l.URL == "") && (l.Name == "AGPL-Header" || l.Name == "AGPL-v3.0" || l.Name == "MPL-2.0" || l.Name == "MPL-2.0-Header" || l.Name == "MIT") {
-				acceptedLicences = append(acceptedLicences, l)
-			}
-		}
+		return false, fmt.Errorf("Wrong licence type '%s'! Use 'private' or 'public'", licence_type)
 	}
 
 	checker := licensecheck.New(acceptedLicences)
 
-	_, succ := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
-	if succ {
+	_, matches := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
+	if matches {
 		return true, nil
 	} else {
-		return false, fmt.Errorf("Licence check failed with a <%d%% match for %s. Ensure the AGPL/MPL/MIT/Zepben licence is present and correct in the file.", RequiredMatchPercentage, filepath)
+		return false, fmt.Errorf("Licence check failed with a <%d%% match for %s. Ensure the %s licence is present and correct in the file.", RequiredMatchPercentage, filepath, licence_type)
 	}
 }
 
@@ -61,14 +58,7 @@ func IsValidLicence(filepath string, private bool) (bool, error) {
 // Should be used on either source files with licence headers or COPYING files.
 func main() {
 
-	var private bool
-	if os.Args[2] == "private" {
-		private = true
-	} else {
-		private = false
-	}
-
-	valid, err := IsValidLicence(os.Args[1], private)
+	valid, err := IsValidLicence(os.Args[1], os.Args[2])
 	if valid {
 		os.Exit(0)
 	} else {
