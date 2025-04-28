@@ -25,9 +25,12 @@ func check(e error) {
 
 func IsValidLicence(filepath string, licence_type string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
+    
 	check(err)
 
 	var acceptedLicences []licensecheck.License
+    // Special exclude licence
+    acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "IgnoreLicence", Text: ZepbenExcludeLicence})
 
 	if licence_type == "private" {
 		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "ZepbenPrivate", Text: ZepbenPrivateLicence})
@@ -39,7 +42,7 @@ func IsValidLicence(filepath string, licence_type string) (bool, error) {
 
 	checker := licensecheck.New(acceptedLicences)
 
-	_, matches := checker.Cover(licence, licensecheck.Options{MinLength: 10, Threshold: RequiredMatchPercentage, Slop: 8})
+	_, matches := checker.Cover(licence, licensecheck.Options{MinLength: 2, Threshold: RequiredMatchPercentage, Slop: 8})
 	if matches {
 		return true, nil
 	} else {
