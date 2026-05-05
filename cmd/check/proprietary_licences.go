@@ -13,3 +13,5 @@ const ZepbenPrivateLicence = `Copyright (c) Zeppelin Bend Pty Ltd (Zepben)
 - All Rights Reserved.
 Unauthorized use, copy, or distribution of this file or its contents, via any medium is strictly prohibited.
 `
+
+const MicrosoftReciprocalLicence = `// Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information.`
