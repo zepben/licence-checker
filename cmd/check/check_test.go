@@ -27,6 +27,7 @@ func TestIsValidLicence(t *testing.T) {
 			{name: "Zepben Private shell-style", args: args{"ZepbenPrivate-shell-style.txt"}, want: true, wantErr: false},
 			{name: "Ignore licence shell-style", args: args{"IgnoreLicence-shell-style.txt"}, want: true, wantErr: false},
 			{name: "Ignore licence C-style", args: args{"IgnoreLicence-C-style.txt"}, want: true, wantErr: false},
+			{name: "Ignore MS reciprocal licence", args: args{"IgnoreMSLicence-C#-style.txt"}, want: true, wantErr: false},
 		},
 		"public": {
 			{name: "Zepben Public C-style", args: args{"ZepbenMPL-C-style.txt"}, want: true, wantErr: false},

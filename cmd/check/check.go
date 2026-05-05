@@ -25,18 +25,24 @@ func check(e error) {
 
 func IsValidLicence(filepath string, licence_type string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
-    
-	check(err)
-
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(-1)
+	}
 	var acceptedLicences []licensecheck.License
-    // Special exclude licence
-    acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "IgnoreLicence", Text: ZepbenExcludeLicence})
+	// Special exclude licence
+	acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "IgnoreLicence", Text: ZepbenExcludeLicence})
 
-	if licence_type == "private" {
+	// TODO: if the number of licences gets large, implement some looping maybe, or array-append
+	// Ignore the following licences
+	acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "MicrosoftReciprocalLicence", Text: MicrosoftReciprocalLicence})
+
+	switch licence_type {
+	case "private":
 		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "ZepbenPrivate", Text: ZepbenPrivateLicence})
-	} else if licence_type == "public" {
+	case "public":
 		acceptedLicences = append(acceptedLicences, licensecheck.License{Name: "ZepbenPublic", Text: ZepbenPublicLicence})
-	} else {
+	default:
 		return false, fmt.Errorf("Wrong licence type '%s'! Use 'private' or 'public'", licence_type)
 	}
 
@@ -61,11 +67,37 @@ func IsValidLicence(filepath string, licence_type string) (bool, error) {
 // Should be used on either source files with licence headers or COPYING files.
 func main() {
 
-	valid, err := IsValidLicence(os.Args[1], os.Args[2])
-	if valid {
-		os.Exit(0)
+	var files []string
+	var err_files []string
+	var err error
+
+	if isFolder(os.Args[1]) {
+		files, err = FindFiles(os.Args[1])
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(-1)
+		}
+
+		for _, path := range files {
+			valid, err := IsValidLicence(path, os.Args[2])
+			if valid {
+				continue
+			} else {
+				fmt.Println(err.Error())
+				err_files = append(err_files, path)
+			}
+		}
+		fmt.Printf("Scanned %d files\n", len(files))
+		if len(err_files) != 0 {
+			os.Exit(-1)
+		}
 	} else {
-		fmt.Println(err.Error())
-		os.Exit(-1)
+		valid, err := IsValidLicence(os.Args[1], os.Args[2])
+		if valid {
+			os.Exit(0)
+		} else {
+			fmt.Println(err.Error())
+			os.Exit(-1)
+		}
 	}
 }
