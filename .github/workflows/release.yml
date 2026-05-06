@@ -22,8 +22,9 @@ jobs:
 
       - name: Build licence checker
         run: |
+          version=$(basename ${{ github.ref }})
           go get -v -t ./...
-          go build -ldflags "-X 'main.version=${{ github.ref }}'" -o licence-checker ./...
+          go build -ldflags "-X 'main.version=${version}'" -o licence-checker ./...
 
       - name: Test licence checker
         run: |

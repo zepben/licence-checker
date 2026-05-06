@@ -22,8 +22,10 @@ jobs:
 
       - name: Build licence checker
         run: |
+          test_version="v1.0"
           go get -v -t ./...
-          go build -o licence-checker ./...
+          go build -ldflags "-X 'main.version=${test_version}'" -o licence-checker ./...
+          ./licence-checker copyright private
 
       - name: Test licence checker
         run: |
