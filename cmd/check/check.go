@@ -17,12 +17,6 @@ import (
 
 const RequiredMatchPercentage = 88
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func IsValidLicence(filepath string, licence_type string) (bool, error) {
 	licence, err := os.ReadFile(filepath)
 	if err != nil {
@@ -65,11 +59,16 @@ func IsValidLicence(filepath string, licence_type string) (bool, error) {
 // Takes a single argument: The path of the file to check
 // Returns 0 on success and -1 if either the licence or header snippet did not meet an 80% match.
 // Should be used on either source files with licence headers or COPYING files.
+var version string
+
 func main() {
 
 	var files []string
 	var err_files []string
 	var err error
+
+
+	fmt.Printf("Licence-check version: %s\n", version)
 
 	if isFolder(os.Args[1]) {
 		files, err = FindFiles(os.Args[1])
