@@ -25,7 +25,7 @@ jobs:
           test_version="v1.0"
           go get -v -t ./...
           go build -ldflags "-X 'main.version=${test_version}'" -o licence-checker ./...
-          ./licence-checker copyright private
+          ./licence-checker .github private
 
       - name: Test licence checker
         run: |
