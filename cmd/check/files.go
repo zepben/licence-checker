@@ -44,7 +44,7 @@ func FindFiles(path string) ([]string, error) {
 			return fmt.Errorf("Can't read files from %s", path)
 		}
 
-		matched, _ := regexp.MatchString("(COPYING|LICENSE|.*\\.py|.*\\.java|.*\\.kt|.*\\.cs|.*\\.proto|.*\\.js|.*\\.ts)$", info.Name())
+		matched, _ := regexp.MatchString("(.*\\.py|.*\\.java|.*\\.kt|.*\\.cs|.*\\.proto|.*\\.js|.*\\.ts)$", info.Name())
 		if matched && !info.IsDir() {
 			files = append(files, npath)
 		}
